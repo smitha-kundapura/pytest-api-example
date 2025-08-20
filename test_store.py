@@ -19,19 +19,22 @@ Test to verify the PATCH request for updating an order by ID.
 Here, I have used the fixture get_new_order_id to create a new order and get the order ID.
 This test will update the order status to "pending" and validate the response.'''
 def test_patch_order_by_id_with_fixture(get_new_order_id):
-    order_id = get_new_order_id
-    status = "pending"
+    # Prepare input payload for patch request
+    order_id = get_new_order_id  # Order ID from the fixture
+    status = "pending" # Status here can be "pending", "sold", or "available"
     patch_data = {
         "status": status
     }
+
+    # Patch request to update the order status
     test_endpoint = f"/store/order/{order_id}"
     response = api_helpers.patch_api_data(test_endpoint, patch_data)
     resp_json = response.json()
-    print(resp_json["message"])
     
     # Validate the response status code for 200 with message containing "Order and pet status updated successfully"
     assert response.status_code == 200
     assert_that(resp_json["message"], contains_string("Order and pet status updated successfully"))
+    
     # Validate the order object if present in response
     if "order" in resp_json:
         order = resp_json["order"]
@@ -40,7 +43,7 @@ def test_patch_order_by_id_with_fixture(get_new_order_id):
 
 
 '''Test to verify cases when order is not found. 
-Here, I have hard Coded 1 as it has pending pending. 
+Here, I have hard Coded 1 as it has pending status. 
 Might create fixture for pending pets if required.'''
 def test_patch_order_by_id_error():
     patch_data = {
@@ -49,7 +52,7 @@ def test_patch_order_by_id_error():
     test_endpoint = f"/store/order/1" #Hard Coded 1 as it has pending pending. Might create fixture for pending pets if required.
     response = api_helpers.patch_api_data(test_endpoint, patch_data)
     resp_json = response.json()
-    print(resp_json["message"])
+    #print(resp_json["message"])
     #Validate the response status code for 404 with message containing "Order not found. You have requested"
     assert response.status_code == 404
     assert_that(resp_json["message"], contains_string("Order not found"))
