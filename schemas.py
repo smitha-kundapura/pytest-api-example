@@ -18,3 +18,23 @@ pet = {
         },
     }
 }
+
+order = {
+    "type": "object",
+    "required": ["pet_id"],
+    "properties": {
+        "id": {
+            "type": "string",
+            "description": "The order ID (UUID)"
+        },
+        "pet_id": {
+            "type": "integer",
+            "description": "The ID of the pet in the order"
+        },
+        "status": {
+            "type": "string",
+            "enum": ["available", "sold", "pending"],
+            "description": "The status of the order"
+        }
+    }
+}
